@@ -11,7 +11,7 @@ main() {
 
 init_docker_container() {
   docker-compose \
-    -f ./example/docker-compose.yml \
+    -f docker-compose.yml \
     up \
     -d
 }
@@ -28,7 +28,7 @@ cleanup() {
 
   echo "Exited with [$exit_code]"
   docker-compose \
-    -f ./example/docker-compose.yml \
+    -f docker-compose.yml \
     stop
   rm -rf ./myrepo
 }
