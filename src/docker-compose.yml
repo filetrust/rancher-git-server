@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  gitserver:
+#    network_mode: "host"
+    image: 'gitserver'
+    command:
+      - '-init'
+      - '-start'
+    volumes:
+      - './initial:/var/lib/initial:ro'
+#    user: "1000:1000"
+    ports:
+     - target: 8080
+       published: 8080
+       protocol: tcp
+       mode: host
