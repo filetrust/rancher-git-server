@@ -41,7 +41,7 @@ initialize_services() {
 #  if [[ ! $(stat -c %A ${GIT_PROJECT_ROOT}) -eq "drwxr-xr-x" ]]; then
     chown -R git:git $GIT_PROJECT_ROOT
     chmod -R 775 $GIT_PROJECT_ROOT
-    cd $GIT_PROJECT_ROOT && git clone https://github.com/filetrust/icap-infrastructure.git
+    cd $GIT_PROJECT_ROOT && git clone https://github.com/filetrust/icap-infrastructure.git && mv icap-infrastructure/ icap-infrastructure.git
 #  fi
 
   sudo /usr/bin/spawn-fcgi \
