@@ -9,40 +9,26 @@
 # Commands:
 #   -start    starts the git server (nginx + fcgi)
 #
-#   -init     turns directories under `/var/lib/initial`
-#             into bare repositories at `/var/lib/git`
+#   -init     into bare repositories at `/var/lib/git`
 #
 
 set -o errexit
 
 readonly GIT_PROJECT_ROOT="/var/lib/git"
-readonly GIT_INITIAL_ROOT="/var/lib/initial"
 readonly GIT_HTTP_EXPORT_ALL="true"
 readonly GIT_USER="git"
 readonly GIT_GROUP="git"
 
 readonly FCGIPROGRAM="/usr/bin/fcgiwrap"
 readonly USERID="nginx"
-readonly SOCKUSERID="$USERID"
 readonly FCGISOCKET="/var/run/fcgiwrap.socket"
 
 main() {
-  mkdir -p $GIT_PROJECT_ROOT
-
-  # Checks if $GIT_INITIAL_ROOT has files
-  if [[ $(ls -A ${GIT_INITIAL_ROOT}) ]]; then
-    initialize_initial_repositories
-  fi
   initialize_services
 }
 
 initialize_services() {
   # Check permissions on $GIT_PROJECT_ROOT
-#  if [[ ! $(stat -c %A ${GIT_PROJECT_ROOT}) -eq "drwxr-xr-x" ]]; then
-    chown -R git:git $GIT_PROJECT_ROOT
-    chmod -R 775 $GIT_PROJECT_ROOT
-    cd $GIT_PROJECT_ROOT && git clone https://github.com/filetrust/icap-infrastructure.git && mv icap-infrastructure/ icap-infrastructure.git
-#  fi
 
   sudo /usr/bin/spawn-fcgi \
     -s $FCGISOCKET \
@@ -54,44 +40,6 @@ initialize_services() {
     "$FCGIPROGRAM"
 
   exec nginx
-}
-
-initialize_initial_repositories() {
-  cd $GIT_INITIAL_ROOT
-
-  rm -rf /var/lib/git/*
-
-  for dir in $(find . -name "*" -type d -maxdepth 1 -mindepth 1); do
-    echo "Initializing repository $dir"
-    init_and_commit $dir
-  done
-
-  if [[ ! $(stat -c %A ${GIT_INITIAL_ROOT}) -eq "drwxr-xr-x" ]]; then
-      chown -R git:git $GIT_INITIAL_ROOT
-      chmod -R 775 $GIT_INITIAL_ROOT
-    fi
-
-}
-
-
-init_and_commit() {
-  local dir=$1
-  local tmp_dir=$(mktemp -d)
-
-  cp -r $dir/* $tmp_dir
-  pushd . >/dev/null
-  cd $tmp_dir
-
-  if [[ -d "./.git" ]]; then
-    rm -rf ./.git
-  fi
-
-  git init &>/dev/null
-  git add --all . &>/dev/null
-  git commit -m "first commit" &>/dev/null
-  git clone --bare $tmp_dir $GIT_PROJECT_ROOT/${dir}.git &>/dev/null
-
-  popd >/dev/null
 }
 
 main "$@"

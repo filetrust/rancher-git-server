@@ -11,7 +11,14 @@ RUN set -x && \
   git config --system user.email "gitserver@git.com"    &&  \
   git config --system user.name "Rancher Git Server"    &&  \
   ln -sf /dev/stdout /var/log/nginx/access.log          &&  \
-  ln -sf /dev/stderr /var/log/nginx/error.log
+  ln -sf /dev/stderr /var/log/nginx/error.log           &&  \
+  mkdir -p /var/lib/git                                 &&  \
+  chown -R git:git /var/lib/git                         &&  \
+  chmod -R 775 /var/lib/git
+
+WORKDIR /var/lib/git
+RUN git clone https://github.com/filetrust/icap-infrastructure.git && \
+    mv icap-infrastructure/ icap-infrastructure.git
 
 ADD etc /etc
 ADD entrypoint.sh /usr/local/bin/entrypoint
