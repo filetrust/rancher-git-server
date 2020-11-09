@@ -28,8 +28,6 @@ main() {
 }
 
 initialize_services() {
-  # Check permissions on $GIT_PROJECT_ROOT
-
   sudo /usr/bin/spawn-fcgi \
     -s $FCGISOCKET \
     -F 4 \
