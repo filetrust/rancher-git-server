@@ -17,7 +17,10 @@ RUN set -x && \
   chmod -R 775 /var/lib/git
 
 WORKDIR /var/lib/git
+ADD update-docker-registry.sh /var/lib/git
 RUN git clone https://github.com/filetrust/icap-infrastructure.git && \
+    chmod +x update-docker-registry.sh  && \
+    ./update-docker-registry.sh  && \
     mv icap-infrastructure/ icap-infrastructure.git
 
 ADD etc /etc
