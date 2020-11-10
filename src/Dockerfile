@@ -19,9 +19,11 @@ RUN apt update && \
 
 WORKDIR /var/lib/git
 ADD update-docker-registry.sh /var/lib/git
+ADD update-secrets.sh /var/lib/git
 
 RUN git clone --mirror https://github.com/filetrust/icap-infrastructure.git && \
     chmod +x update-docker-registry.sh  && \
+    chmod +x update-secrets.sh  && \
     cd icap-infrastructure.git && \
     git config --bool core.bare false && \
     git config receive.denyCurrentBranch ignore && \
@@ -32,11 +34,13 @@ RUN git clone --mirror https://github.com/filetrust/icap-infrastructure.git && \
     git config --global user.name "Rancher Server" && \
     git checkout develop && \
     /var/lib/git/update-docker-registry.sh && \
+    /var/lib/git/update-secrets.sh && \
     git add . && \
     git commit -m 'Update the container registry' && \
     git push --force && \
     git checkout main && \
     /var/lib/git/update-docker-registry.sh && \
+    /var/lib/git/update-secrets.sh && \
     git add . && \
     git commit -m 'Update the container registry' && \
     git push --force
