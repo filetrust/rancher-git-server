@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-cd icap-infrastructure
-
 shopt -s dotglob
 
 find * -prune -type d | while IFS= read -r d; do
