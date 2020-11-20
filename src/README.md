@@ -7,6 +7,16 @@
 
 To build and tag a git server you'll need to build a docker image using:
 * `DOCKER_BUILDKIT=1 docker build -t glasswallsolutions/git-server:VERSION --secret id=az-secret,src=secrets.json --progress=plain --no-cache .`
+
+Your local secrets.json file should look:
+
+`{
+  "clientId": "MY_AZURE_CLIENT_ID",
+  "clientSecret": "MY_AZURE_CLIENT_SECRET",
+  "tenantId": "MY_AZURE_CLIENT_TENANT ID"
+}
+` 
+
 then push to glasswall container registry:
 * `docker push glasswallsolutions/git-server:VERSION`
 To run git server locally (Mac OS)
