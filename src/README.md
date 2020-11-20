@@ -5,22 +5,17 @@
 
 ## Usage
 
-To run a git server you'll need to build a docker image using:
-* `make image`
-then execute a quick test to ensure it works as expected:
-* `make test`
-then running the container
-* `make gitserver`
+To build and tag a git server you'll need to build a docker image using:
+* `DOCKER_BUILDKIT=1 docker build -t glasswallsolutions/git-server:VERSION --secret id=az-secret,src=secrets.json --progress=plain --no-cache .`
+then push to glasswall container registry:
+* `docker push glasswallsolutions/git-server:VERSION`
+To run git server locally (Mac OS)
+* `docker run -d -v /Users/USER/initial:/var/lib/initial -p 80:8080 glasswallsolutions/git-server:VERSION`
 
-## Test
-
-run `./test.sh` and all the tests should pass.
-
-This will create a git server http service on `:80`. Now you can clone the sample repository:
-
+This will create a git server http service on `:80`. Now you can clone the icap infrastructure repository:
 
 ```sh
-git clone http://localhost:8080/myrepo.git
+git clone http://localhost:8080/icap-infrastructure.git
 ```
 
 
