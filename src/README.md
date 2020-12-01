@@ -25,7 +25,7 @@ To run git server locally (Mac OS)
 This will create a git server http service on `:80`. Now you can clone the icap infrastructure repository:
 
 ```sh
-git clone http://localhost:8080/icap-infrastructure.git
+git clone http://localhost:80/icap-infrastructure.git
 ```
 
 
