@@ -19,6 +19,8 @@ Your local secrets.json file should look:
 
 then push to glasswall container registry:
 * `docker push glasswallsolutions/git-server:VERSION`
+
+
 To run git server locally (Mac OS)
 * `docker run -d -v /Users/USER/initial:/var/lib/initial -p 80:8080 glasswallsolutions/git-server:VERSION`
 
