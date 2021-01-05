@@ -3,7 +3,6 @@
 app_id=$(cat /run/secrets/az-secret | jq -r '.clientId')
 password=$(cat /run/secrets/az-secret | jq -r '.clientSecret')
 tenant_id=$(cat /run/secrets/az-secret | jq -r '.tenantId')
-docker_config=$(cat /run/secrets/az-secret | jq -r '.dockerConfig')
 
 az login --service-principal --username $app_id --password $password --tenant $tenant_id
 
