@@ -23,6 +23,7 @@ WORKDIR /var/lib/git
 ADD update-docker-registry.sh /var/lib/git
 ADD update-secrets.sh /var/lib/git
 
+#TODO pass glasswall container registry url to update docker registry script
 RUN git clone --mirror https://github.com/filetrust/icap-infrastructure.git && \
     chmod +x update-docker-registry.sh  && \
     chmod +x update-secrets.sh  && \
