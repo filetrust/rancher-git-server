@@ -86,6 +86,10 @@ RUN set -x && \
   chown -R git:git /var/lib/git                                                 &&  \
   chmod -R 775 /var/lib/git
 
+RUN wget https://github.com/mikefarah/yq/releases/download/3.4.1/yq_linux_amd64 &&  \
+  chmod +x yq_linux_amd64                                                       &&  \
+  mv yq_linux_amd64 /usr/bin/yq
+
 ADD etc /etc
 ADD entrypoint.sh /usr/local/bin/entrypoint
 
@@ -94,5 +98,3 @@ COPY --from=builder /var/lib/git .
 
 ENTRYPOINT [ "entrypoint" ]
 CMD [ "-start" ]
-
-

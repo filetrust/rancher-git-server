@@ -24,7 +24,9 @@ readonly USERID="nginx"
 readonly FCGISOCKET="/var/run/fcgiwrap.socket"
 
 main() {
-  override_registry_url
+  if [ -f /etc/container_registry ]; then
+    override_registry_url
+  fi
   initialize_services
 }
 
@@ -36,7 +38,7 @@ override_registry_url() {
   git config --global user.email "rancher@glasswall.invalid"
   git config --global user.name "Rancher Server"
   git checkout add-image-registry
-  /var/lib/git/update-docker-registry.sh container_registry
+  /var/lib/git/update-docker-registry.sh $container_registry
   git add .
   git commit -m 'Update the container registry url'
   git push --force

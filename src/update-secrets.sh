@@ -26,6 +26,3 @@ find * -prune -type d | while IFS= read -r d; do
     done
     cd ..
 done
-
-
-
