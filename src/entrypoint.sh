@@ -29,18 +29,26 @@ main() {
 }
 
 override_registry_url() {
+  echo "override registry url"
   container_registry=$(</etc/container_registry)
-
+  if [ "$container_registry" = "" ]
+  then
+    echo "Usage: $0 Enter a docker container registry, e.g gwicapcontainerregistry.azurecr.io/"
+    exit
+  fi
+  echo "registry is $container_registry"
+  cd /tmp
+  echo "Start git clone"
   git clone /var/lib/git/icap-infrastructure.git icap-infra
+  echo "Finished git clone"
   cd ./icap-infra
   git config --global user.email "rancher@glasswall.invalid"
   git config --global user.name "Rancher Server"
   git checkout add-image-registry
-  /var/lib/git/update-docker-registry.sh container_registry
+  /var/lib/git/update-docker-registry.sh $container_registry
   git add .
   git commit -m 'Update the container registry url'
   git push --force
-
 }
 
 initialize_services() {

@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+if [ "$1" = "" ]
+then
+  echo "Usage: $0 Enter a docker container registry, e.g gwicapcontainerregistry.azurecr.io/"
+  exit
+fi
+echo "Container registry is $1"
 shopt -s dotglob
 
 find * -prune -type d | while IFS= read -r d; do
@@ -8,8 +14,7 @@ find * -prune -type d | while IFS= read -r d; do
 
     if [ -a values.yaml ]
       then
-        #TODO parametirise container registry url instead of hardcoding gwicapcontainerregistry.azurecr.io/
-	      yq write values.yaml 'imagestore.(registry==*).registry' gwicapcontainerregistry.azurecr.io/ -i
+	      yq write values.yaml 'imagestore.(registry==*).registry' $1 -i
     fi
 
     cd ..

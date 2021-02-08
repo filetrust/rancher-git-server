@@ -1,5 +1,10 @@
 # syntax = docker/dockerfile:1.0-experimental
 FROM ubuntu:latest AS builder
+
+ARG CONTAINER_REGISTRY_URL="gwicapcontainerregistry.azurecr.io/"
+
+RUN echo ${CONTAINER_REGISTRY_URL}
+
 RUN apt update && \
     apt install software-properties-common -y && \
     add-apt-repository ppa:rmescandon/yq && \
@@ -23,7 +28,6 @@ WORKDIR /var/lib/git
 ADD update-docker-registry.sh /var/lib/git
 ADD update-secrets.sh /var/lib/git
 
-#TODO pass glasswall container registry url to update docker registry script
 RUN git clone --mirror https://github.com/filetrust/icap-infrastructure.git && \
     chmod +x update-docker-registry.sh  && \
     chmod +x update-secrets.sh  && \
@@ -36,32 +40,13 @@ RUN git clone --mirror https://github.com/filetrust/icap-infrastructure.git && \
     git config --global user.email "rancher@glasswall.invalid" && \
     git config --global user.name "Rancher Server" && \
     git checkout add-image-registry && \
-    /var/lib/git/update-docker-registry.sh && \
-    git add . && \
-    git commit -m 'Update the container registry' && \
-    git push --force && \
-    git checkout main && \
-    /var/lib/git/update-docker-registry.sh && \
-    git add . && \
-    git commit -m 'Update the container registry' && \
-    git push --force && \
-    git checkout add-image-registry && \
-    /var/lib/git/update-docker-registry.sh && \
+    /var/lib/git/update-docker-registry.sh ${CONTAINER_REGISTRY_URL} && \
     git add . && \
     git commit -m 'Update the container registry' && \
     git push --force
 
+
 RUN --mount=type=secret,id=az-secret cd /tmp/icap-infra && \
-    git checkout add-image-registry && \
-    /var/lib/git/update-secrets.sh && \
-    git add . && \
-    git commit -m 'Update the secrets' || true && \
-    git push --force && \
-    git checkout main && \
-    /var/lib/git/update-secrets.sh && \
-    git add . && \
-    git commit -m 'Update the secrets' || true && \
-    git push --force && \
     git checkout add-image-registry && \
     /var/lib/git/update-secrets.sh && \
     git add . && \
@@ -72,7 +57,7 @@ FROM nginx:alpine
 
 RUN set -x && \
   apk --update upgrade                                                          &&  \
-  apk add git bash fcgiwrap spawn-fcgi wget sudo su-exec git-daemon             &&  \
+  apk add git bash fcgiwrap spawn-fcgi wget sudo su-exec git-daemon yq --repository=http://dl-cdn.alpinelinux.org/alpine/v3.13/community         &&  \
   adduser git -h /var/lib/git -D                                                &&  \
   adduser nginx git                                                             &&  \
   echo "git ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/99-git-user                &&  \
