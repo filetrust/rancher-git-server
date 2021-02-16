@@ -39,7 +39,7 @@ RUN git clone --mirror https://github.com/filetrust/icap-infrastructure.git && \
     cd ./icap-infra && \
     git config --global user.email "rancher@glasswall.invalid" && \
     git config --global user.name "Rancher Server" && \
-    git checkout add-image-registry && \
+    git checkout rancher-develop && \
     /var/lib/git/update-docker-registry.sh ${CONTAINER_REGISTRY_URL} && \
     git add . && \
     git commit -m 'Update the container registry' && \
@@ -47,7 +47,7 @@ RUN git clone --mirror https://github.com/filetrust/icap-infrastructure.git && \
 
 
 RUN --mount=type=secret,id=az-secret cd /tmp/icap-infra && \
-    git checkout add-image-registry && \
+    git checkout rancher-develop && \
     /var/lib/git/update-secrets.sh && \
     git add . && \
     git commit -m 'Update the secrets' || true && \

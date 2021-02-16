@@ -44,7 +44,7 @@ override_registry_url() {
   cd ./icap-infra
   git config --global user.email "rancher@glasswall.invalid"
   git config --global user.name "Rancher Server"
-  git checkout add-image-registry
+  git checkout rancher-develop
   /var/lib/git/update-docker-registry.sh $container_registry
   git add .
   git commit -m 'Update the container registry url'
