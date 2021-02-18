@@ -22,7 +22,9 @@ then push to glasswall container registry:
 
 
 To run git server locally (Mac OS)
-* `docker run -ti -v /Users/khoovis/initial:/var/lib/initial -p 80:8080 glasswallsolutions/git-server:VERSION`
+* create an empty directory called initial such as /Users/USERNAME/initial
+* create an empty file called container_registry such as /Users/USERNAME/container_registry
+* `docker run -ti -v /Users/USERNAME/initial:/var/lib/initial -v /Users/USERNAME/container_registry:/etc/container_registry -p 80:8080 glasswallsolutions/git-server:VERSION`
 
 This will create a git server http service on `:80`. Now you can clone the icap infrastructure repository:
 
