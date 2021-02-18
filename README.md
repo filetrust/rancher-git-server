@@ -30,6 +30,7 @@ This will create a git server http service on `:80`. Now you can clone the icap 
 
 ```sh
 git clone http://localhost:80/icap-infrastructure.git
+git checkout rancher-develop to check the helm charts that are going to be deployed on rancher
 ```
 
 
